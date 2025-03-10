@@ -18,9 +18,9 @@ void encode(ofstream& log_file) {
     for (int i = 0; i < ITERATION; i ++) {
         cout << get_current_time() << "\tEncoding at the " << i + 1 << get_ordinal_suffix(i + 1) << " iteration" << endl;
         log_file << get_current_time() << "\tEncoding at the " << i + 1 << get_ordinal_suffix(i + 1) << " iteration" << endl;
-        string line;
-        getline(gen_file, line);
-        Polynomial message = convert_string_to_polynomial(line);
+        string gen_data_line;
+        getline(gen_file, gen_data_line);
+        Polynomial message = convert_string_to_polynomial(gen_data_line);
         Polynomial codeword = RS0.systematic_encode(message);
         enc_file << convert_polynomial_to_string(codeword) << endl;
     }

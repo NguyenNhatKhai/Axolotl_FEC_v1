@@ -102,6 +102,7 @@ void error_evaluate(ofstream& log_file) {
     string err_eva_aux_dis_file_name = "err_eva_aux_dis_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
     string err_eva_aux_err_loc_file_name = "err_eva_aux_err_loc_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
     string err_eva_eva_file_name = "err_eva_eva_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
+    string err_eva_file_name = "err_eva_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
     ifstream bma_sol_err_loc_file("../Outputs/" + bma_sol_err_loc_file_name + ".txt");
     ifstream bma_sol_aux_dis_file("../Outputs/" + bma_sol_aux_dis_file_name + ".txt");
     ifstream bma_sol_aux_err_loc_file("../Outputs/" + bma_sol_aux_err_loc_file_name + ".txt");
@@ -111,6 +112,7 @@ void error_evaluate(ofstream& log_file) {
     ofstream err_eva_aux_dis_file("../Outputs/" + err_eva_aux_dis_file_name + ".txt");
     ofstream err_eva_aux_err_loc_file("../Outputs/" + err_eva_aux_err_loc_file_name + ".txt");
     ofstream err_eva_eva_file("../Outputs/" + err_eva_eva_file_name + ".txt");
+    ofstream err_eva_file("../Outputs/" + err_eva_file_name + ".txt");
     vector<Element> searched_odd_values;
     vector<Element> searched_values;
     vector<Element> evaluated_auxiliary_discrepancy_values;
@@ -152,6 +154,13 @@ void error_evaluate(ofstream& log_file) {
         for (int j = 0; j < evaluated_values.size(); j ++) {
             err_eva_eva_file << convert_element_to_string(evaluated_values[(j + 1) % evaluated_values.size()]) << endl;
         }
+        for (int j = 0; j < evaluated_values.size(); j ++) {
+            if (searched_values[(j + 1) % evaluated_values.size()] == RS0.symbol_field->zero_element()) {
+                err_eva_file << convert_element_to_string(evaluated_values[(j + 1) % evaluated_values.size()]) << endl;
+            } else {
+                err_eva_file << convert_element_to_string(RS0.symbol_field->zero_element()) << endl;
+            }
+        }
     }
     bma_sol_err_loc_file.close();
     bma_sol_aux_dis_file.close();
@@ -162,45 +171,49 @@ void error_evaluate(ofstream& log_file) {
     err_eva_aux_dis_file.close();
     err_eva_aux_err_loc_file.close();
     err_eva_eva_file.close();
+    err_eva_file.close();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// void error_estimate() {
-//     string bma_sol_err_loc_len_file_name = "bma_sol_err_loc_len_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
-//     string rtc_sea_file_name = "rtc_sea_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
-//     string err_eva_file_name = "err_eva_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
-//     string err_est_file_name = "err_est_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
-//     ifstream bma_sol_err_loc_len_file("../Outputs/" + bma_sol_err_loc_len_file_name + ".txt");
-//     ifstream rtc_sea_file("../Outputs/" + rtc_sea_file_name + ".txt");
-//     ifstream err_eva_file("../Outputs/" + err_eva_file_name + ".txt");
-//     ofstream err_est_file("../Outputs/" + err_est_file_name + ".txt");
-//     for (int i = 0; i < ITERATION; i ++) {
-//         cout << get_current_time() << "\tError estimating at the " << i + 1 << get_ordinal_suffix(i + 1) << " iteration" << endl;
-//         vector<Element> error_numbers;
-//         vector<Element> error_values;
-//         string rtc_sea_data_line;
-//         string err_eva_data_line;
-//         for (int j = 0; j < RS0.symbol_field->size() - 1; j ++) {
-//             getline(rtc_sea_file, rtc_sea_data_line);
-//             getline(err_eva_file, err_eva_data_line);
-//             if (convert_string_to_element(rtc_sea_data_line) == RS0.symbol_field->zero_element()) {
-//                 error_numbers.push_back(~RS0.symbol_field->general_elements[RS0.symbol_field->size() - 2 - j]);
-//                 error_values.push_back(convert_string_to_element(err_eva_data_line));
-//             }
-//         }
-//         int error_location_length;
-//         bma_sol_err_loc_len_file >> error_location_length;
-//         Polynomial estimated_error(&FIE0, vector<Element>(RS0.codeword_length(), RS0.symbol_field->zero_element()));
-//         if (error_numbers.size() == error_location_length) {
-//             estimated_error = RS0.estimated_error(error_numbers, error_values);
-//         }
-//         err_est_file << convert_polynomial_to_string(estimated_error).substr(0, RS0.message_length() * RS0.symbol_size()) << endl;
-//     }
-//     bma_sol_err_loc_len_file.close();
-//     rtc_sea_file.close();
-//     err_eva_file.close();
-//     err_est_file.close();
-// }
+void error_correct(ofstream& log_file) {
+    string gen_file_name = "gen_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
+    string cha_file_name = "cha_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
+    string err_eva_file_name = "err_eva_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
+    string err_cor_file_name = "err_cor_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
+    ifstream gen_file("../Outputs/" + gen_file_name + ".txt");
+    ifstream cha_file("../Outputs/" + cha_file_name + ".txt");
+    ifstream err_eva_file("../Outputs/" + err_eva_file_name + ".txt");
+    ofstream err_cor_file("../Outputs/" + err_cor_file_name + ".txt");
+    vector<Element> evaluated_values;
+    for (int i = 0; i < ITERATION; i ++) {
+        evaluated_values.clear();
+        cout << get_current_time() << "\tError correcting at the " << i + 1 << get_ordinal_suffix(i + 1) << " iteration" << endl;
+        log_file << get_current_time() << "\tError correcting at the " << i + 1 << get_ordinal_suffix(i + 1) << " iteration" << endl;
+        string gen_data_line;
+        getline(gen_file, gen_data_line);
+        Polynomial message = convert_string_to_polynomial(gen_data_line);
+        string cha_data_line;
+        getline(cha_file, cha_data_line);
+        Polynomial received = convert_string_to_polynomial(cha_data_line);
+        for (int j = 0; j < RS0.symbol_field->size() - 1; j ++) {
+            string err_eva_data_line;
+            getline(err_eva_file, err_eva_data_line);
+            evaluated_values.insert(evaluated_values.begin(), convert_string_to_element(err_eva_data_line));
+        }
+        Polynomial estimated_error(&FIE0, evaluated_values);
+        Polynomial estimated_codeword = RS0.estimated_codeword(received, estimated_error);
+        Polynomial estimated_message = RS0.estimated_message(estimated_codeword);
+        err_cor_file << convert_polynomial_to_string(estimated_message) << endl;
+        if (message == estimated_message) {
+            cout << "\t\t\t\tError correcting passed" << endl;
+        } else {
+            cout << "\t\t\t\tError correcting failed" << endl;
+        }
+    }
+    cha_file.close();
+    err_eva_file.close();
+    separate(err_cor_file_name);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

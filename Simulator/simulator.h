@@ -8,7 +8,7 @@
 #ifndef _SIMULATOR_H_
 #define _SIMULATOR_H_
 
-// #define DEBUG
+#define DEBUG
 
 #include <algorithm>
 #include <ctime>
@@ -31,11 +31,11 @@ using namespace std;
 // #define INTERFACE 2
 // #define ITERATION 5
 
-#define INTERFACE 4
-#define ITERATION 10
+// #define INTERFACE 4
+// #define ITERATION 10
 
-// #define INTERFACE 16
-// #define ITERATION 20
+#define INTERFACE 16
+#define ITERATION 20
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -44,11 +44,11 @@ using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int INT0 = 2;
-Polynomial POL0(&fields::default_field, {BIN1, BIN1, BIN0, BIN0, BIN1});
+// int INT0 = 2;
+// Polynomial POL0(&fields::default_field, {BIN1, BIN1, BIN0, BIN0, BIN1});
 
-// int INT0 = 8;
-// Polynomial POL0(&fields::default_field, {BIN1, BIN0, BIN1, BIN1, BIN1, BIN0, BIN0, BIN0, BIN1});
+int INT0 = 8;
+Polynomial POL0(&fields::default_field, {BIN1, BIN0, BIN1, BIN1, BIN1, BIN0, BIN0, BIN0, BIN1});
 
 Field FIE0(&POL0);
 RS RS0(&FIE0, INT0);

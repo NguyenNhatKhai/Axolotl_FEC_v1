@@ -17,14 +17,14 @@ int main() {
         // generate(log_file);
         // encode(log_file);
 
-        // channel_random_1s1p(log_file, {2, 2, 2, 2, 2, 2, 2, 2, 2, 2});
-        // channel_random_1s1p(log_file, {8, 7, 6, 5, 4, 3, 2, 1, 0, 20, 18, 16, 14, 12, 10, 8, 6, 4, 2, 0});
+        // channel_random_1s1p(log_file, {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2});
+        channel_random_1s1p(log_file, {8, 7, 6, 5, 4, 3, 2, 1, 0, 20, 18, 16, 14, 12, 10, 8, 6, 4, 2, 0});
         // channel_random_1s1p(log_file, {8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8});
 
-        // syndrome_calculate(log_file);
-        // bma_solve(log_file);
+        syndrome_calculate(log_file);
+        bma_solve(log_file);
         error_evaluate(log_file);
-        // error_estimate();
+        error_correct(log_file);
     } catch (const char* error_message) {
         cout << error_message << endl;
     }
