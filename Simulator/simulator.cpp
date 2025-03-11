@@ -18,8 +18,8 @@ int main() {
         // encode(log_file);
 
         // channel_random_1s1p(log_file, {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2});
-        channel_random_1s1p(log_file, {8, 7, 6, 5, 4, 3, 2, 1, 0, 20, 18, 16, 14, 12, 10, 8, 6, 4, 2, 0});
-        // channel_random_1s1p(log_file, {8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8});
+        // channel_random_1s1p(log_file, {8, 7, 6, 5, 4, 3, 2, 1, 0, 20, 18, 16, 14, 12, 10, 8, 6, 4, 2, 0});
+        channel_random_1s1p(log_file, {9, 10, 0, 0, 0, 0, 9, 10, 0, 0, 1, 2, 0, 0, 9, 10, 11, 12, 0, 0});
 
         syndrome_calculate(log_file);
         bma_solve(log_file);

@@ -31,10 +31,10 @@ using namespace std;
 // #define INTERFACE 2
 // #define ITERATION 5
 
-// #define INTERFACE 4
-// #define ITERATION 10
+// #define INTERFACE 2
+// #define ITERATION 20
 
-#define INTERFACE 16
+#define INTERFACE 8
 #define ITERATION 20
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
