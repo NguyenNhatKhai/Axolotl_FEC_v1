@@ -217,3 +217,16 @@ void error_correct(ofstream& log_file) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void decode(ofstream& log_file) {
+    string err_cor_file_name = "err_cor_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
+    string dec_file_name = "dec_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
+    ifstream err_cor_file("../Outputs/" + err_cor_file_name + ".txt");
+    ofstream dec_file("../Outputs/" + dec_file_name + ".txt");
+    dec_file << err_cor_file.rdbuf();
+    err_cor_file.close();
+    dec_file.close();
+    separate(dec_file_name);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
