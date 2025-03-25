@@ -99,7 +99,7 @@ void error_evaluate(ofstream& log_file) {
     string bma_sol_err_loc_len_file_name = "bma_sol_err_loc_len_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
     string err_eva_sea_odd_file_name = "err_eva_sea_odd_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
     string err_eva_sea_file_name = "err_eva_sea_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
-    string err_eva_aux_dis_file_name = "err_eva_aux_dis_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
+    string err_eva_num_file_name = "err_eva_num_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
     string err_eva_aux_err_loc_file_name = "err_eva_aux_err_loc_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
     string err_eva_eva_file_name = "err_eva_eva_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
     string err_eva_file_name = "err_eva_data_" + to_string(RS0.codeword_length()) + "_" + to_string(RS0.message_length());
@@ -109,19 +109,19 @@ void error_evaluate(ofstream& log_file) {
     ifstream bma_sol_err_loc_len_file("../Outputs/" + bma_sol_err_loc_len_file_name + ".txt");
     ofstream err_eva_sea_odd_file("../Outputs/" + err_eva_sea_odd_file_name + ".txt");
     ofstream err_eva_sea_file("../Outputs/" + err_eva_sea_file_name + ".txt");
-    ofstream err_eva_aux_dis_file("../Outputs/" + err_eva_aux_dis_file_name + ".txt");
+    ofstream err_eva_num_file("../Outputs/" + err_eva_num_file_name + ".txt");
     ofstream err_eva_aux_err_loc_file("../Outputs/" + err_eva_aux_err_loc_file_name + ".txt");
     ofstream err_eva_eva_file("../Outputs/" + err_eva_eva_file_name + ".txt");
     ofstream err_eva_file("../Outputs/" + err_eva_file_name + ".txt");
     vector<Element> searched_odd_values;
     vector<Element> searched_values;
-    vector<Element> evaluated_auxiliary_discrepancy_values;
+    vector<Element> evaluated_numerator_values;
     vector<Element> evaluated_auxiliary_error_location_values;
     vector<Element> evaluated_values;
     for (int i = 0; i < ITERATION; i ++) {
         searched_odd_values.clear();
         searched_values.clear();
-        evaluated_auxiliary_discrepancy_values.clear();
+        evaluated_numerator_values.clear();
         evaluated_auxiliary_error_location_values.clear();
         evaluated_values.clear();
         cout << get_current_time() << "\tError evaluating at the " << i + 1 << get_ordinal_suffix(i + 1) << " iteration" << endl;
@@ -138,15 +138,15 @@ void error_evaluate(ofstream& log_file) {
         int error_location_length;
         bma_sol_err_loc_len_file >> error_location_length;
         vector<Element> error_numbers = RS0.chien_search(error_location, searched_odd_values, searched_values);
-        vector<Element> error_values = RS0.horiguchi_koetter_algorithm(auxiliary_discrepancy, auxiliary_error_location, error_location_length, searched_odd_values, searched_values, evaluated_auxiliary_discrepancy_values, evaluated_auxiliary_error_location_values, evaluated_values);
+        vector<Element> error_values = RS0.horiguchi_koetter_algorithm(auxiliary_discrepancy, auxiliary_error_location, error_location_length, searched_odd_values, searched_values, evaluated_numerator_values, evaluated_auxiliary_error_location_values, evaluated_values);
         for (int j = 0; j < searched_odd_values.size(); j ++) {
             err_eva_sea_odd_file << convert_element_to_string(searched_odd_values[(j + 1) % searched_odd_values.size()]) << endl;
         }
         for (int j = 0; j < searched_values.size(); j ++) {
             err_eva_sea_file << convert_element_to_string(searched_values[(j + 1) % searched_values.size()]) << endl;
         }
-        for (int j = 0; j < evaluated_auxiliary_discrepancy_values.size(); j ++) {
-            err_eva_aux_dis_file << convert_element_to_string(evaluated_auxiliary_discrepancy_values[(j + 1) % evaluated_auxiliary_discrepancy_values.size()]) << endl;
+        for (int j = 0; j < evaluated_numerator_values.size(); j ++) {
+            err_eva_num_file << convert_element_to_string(evaluated_numerator_values[(j + 1) % evaluated_numerator_values.size()]) << endl;
         }
         for (int j = 0; j < evaluated_auxiliary_error_location_values.size(); j ++) {
             err_eva_aux_err_loc_file << convert_element_to_string(evaluated_auxiliary_error_location_values[(j + 1) % evaluated_auxiliary_error_location_values.size()]) << endl;
@@ -168,7 +168,7 @@ void error_evaluate(ofstream& log_file) {
     bma_sol_err_loc_len_file.close();
     err_eva_sea_odd_file.close();
     err_eva_sea_file.close();
-    err_eva_aux_dis_file.close();
+    err_eva_num_file.close();
     err_eva_aux_err_loc_file.close();
     err_eva_eva_file.close();
     err_eva_file.close();

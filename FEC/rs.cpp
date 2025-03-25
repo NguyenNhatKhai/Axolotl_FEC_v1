@@ -457,7 +457,7 @@ vector<Element> RS::chien_search(const Polynomial& error_location, vector<Elemen
     return temp_0_elements;
 }
 
-vector<Element> RS::horiguchi_koetter_algorithm(const Element& auxiliary_discrepancy, const Polynomial& auxiliary_error_location, const int& error_location_length, const vector<Element>& searched_odd_values, const vector<Element>& searched_values, vector<Element>& evaluated_auxiliary_discrepancy_values, vector<Element>& evaluated_auxiliary_error_location_values, vector<Element>& evaluated_values) const {
+vector<Element> RS::horiguchi_koetter_algorithm(const Element& auxiliary_discrepancy, const Polynomial& auxiliary_error_location, const int& error_location_length, const vector<Element>& searched_odd_values, const vector<Element>& searched_values, vector<Element>& evaluated_numerator_values, vector<Element>& evaluated_auxiliary_error_location_values, vector<Element>& evaluated_values) const {
     #ifdef DEBUG
         if (*auxiliary_discrepancy.field != *this->symbol_field) {
             throw "FEC\\RS\\horiguchi_koetter_algorithm(const Element&, const Polynomial&, const int&, const vector<Element>&, const vector<Element>&, vector<Element>&, vector<Element>&, vector<Element>&)\\auxiliary_discrepancy\\field";
@@ -487,14 +487,14 @@ vector<Element> RS::horiguchi_koetter_algorithm(const Element& auxiliary_discrep
     #endif
     vector<Element> temp_0_elements;
     for (int i = 0; i < this->symbol_field->size() - 1; i ++) {
-        Element evaluated_auxiliary_discrepancy_value = auxiliary_discrepancy * (this->symbol_field->general_elements[i] ^ (this->correction_capability() + error_location_length - 1));
+        Element evaluated_numerator_value = auxiliary_discrepancy * (this->symbol_field->general_elements[i] ^ (this->correction_capability() + error_location_length - 1));
         Element evaluated_auxiliary_error_location_value = auxiliary_error_location.evaluate(this->symbol_field->general_elements[i]);
         Element temp_1_element = evaluated_auxiliary_error_location_value * searched_odd_values[i];
         Element evaluated_value = this->symbol_field->zero_element();
         if (temp_1_element != this->symbol_field->zero_element()) {
-            evaluated_value = evaluated_auxiliary_discrepancy_value / temp_1_element;
+            evaluated_value = evaluated_numerator_value / temp_1_element;
         }
-        evaluated_auxiliary_discrepancy_values.push_back(evaluated_auxiliary_discrepancy_value);
+        evaluated_numerator_values.push_back(evaluated_numerator_value);
         evaluated_auxiliary_error_location_values.push_back(evaluated_auxiliary_error_location_value);
         evaluated_values.push_back(evaluated_value);
         if (searched_values[i] == this->symbol_field->zero_element()) {
