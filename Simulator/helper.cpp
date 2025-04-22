@@ -184,3 +184,63 @@ void get_rsc_gen_pol() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+string convert_binary_to_hexadecimal(string binary) {
+    if (4 - binary.length() % 4 != 4) {
+        binary = string(4 - binary.length() % 4, '0') + binary;
+    }
+    stringstream hexadecimal;
+    for (int i = 0; i < binary.length(); i += 4) {
+        hexadecimal << hex << bitset<4>(binary.substr(i, 4)).to_ullong();
+    }
+    return hexadecimal.str();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int report_element(Element element) {
+    for (int i = 0; i < RS0.symbol_field->size() - 1; i ++) {
+        if (element == RS0.symbol_field->general_elements[i]) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void report_general_element() {
+    for (int i = 0; i < RS0.symbol_field->size() / 2; i ++) {
+        Element first_element = RS0.symbol_field->general_elements[(RS0.symbol_field->size() + i - 1) % RS0.symbol_field->size()];
+        Element second_element = RS0.symbol_field->general_elements[(RS0.symbol_field->size() / 2 + i - 1) % RS0.symbol_field->size()];
+        // cout << "$\\alpha^{" << i - 1 << "}$ & $" << convert_element_to_string(first_element) << "$ & $" << convert_binary_to_hexadecimal(convert_element_to_string(first_element)) << "$ & $\\alpha^{" << i - 1 + RS0.symbol_field->size() / 2 << "}$ & $" << convert_element_to_string(second_element) << "$ & $" << convert_binary_to_hexadecimal(convert_element_to_string(second_element)) << "$ \\\\" << endl;
+        string first_binary = convert_element_to_string(first_element);
+        string second_binary = convert_element_to_string(second_element);
+        reverse(first_binary.begin(), first_binary.end());
+        reverse(second_binary.begin(), second_binary.end());
+        string first_hexadecimal = convert_binary_to_hexadecimal(convert_element_to_string(first_element));
+        string second_hexadecimal = convert_binary_to_hexadecimal(convert_element_to_string(second_element));
+        reverse(first_hexadecimal.begin(), first_hexadecimal.end());
+        reverse(second_hexadecimal.begin(), second_hexadecimal.end());
+        cout << "$\\alpha^{" << i - 1 << "}$ & $" << first_binary << "$ & $" << first_hexadecimal << "$ & $\\alpha^{" << i - 1 + RS0.symbol_field->size() / 2 << "}$ & $" << second_binary << "$ & $" << second_hexadecimal << "$ \\\\" << endl;
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void report_generator_polynomial() {
+    for (int i = 0; i <= RS0.generator_polynomial.degree(); i ++) {
+        if (report_element(RS0.generator_polynomial.coefficients[i]) > 0) {
+            cout << "\\alpha^{" << report_element(RS0.generator_polynomial.coefficients[i]) << "} X^{" << i << "}";
+        } else if (report_element(RS0.generator_polynomial.coefficients[i]) == 0) {
+            cout << "X^{" << i << "}";
+        }
+        if (i < RS0.generator_polynomial.degree()) {
+            cout << " + ";
+        }
+    }
+    cout << endl;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////

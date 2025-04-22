@@ -16,10 +16,6 @@ int main() {
     try {
         // generate(log_file);
         // encode(log_file);
-
-        // channel_random_1s1p(log_file, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
-        // channel_random_1s1p(log_file, {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2});
-        // channel_random_1s1p(log_file, {8, 7, 6, 5, 4, 3, 2, 1, 0, 20, 18, 16, 14, 12, 10, 8, 6, 4, 2, 0});
         
         channel_random_1s1p(log_file, {
             0, 0, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -49,6 +45,8 @@ int main() {
 //         // get_egf_gen_ele();
 //         // get_egf_inv_map_ele();
 //         // get_rsc_gen_pol();
+//         report_general_element();
+//         // report_generator_polynomial();
 //     } catch (const char* error_message) {
 //         cout << error_message << endl;
 //     }
